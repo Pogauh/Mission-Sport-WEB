@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{parent()}}Mon compte{% endblock %}
+
+{% block body %}
+
+<style>
+.medium{
+    font-size: medium;
+}
+.large {
+    font-size:large;
+}
+.small{
+    font-size : small;
+}
+.Déconnexion{
+    text-decoration: underline;
+        font-size: medium;
+        text-align : center;
+}
+
+</style>
+
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 card ">
+        <h1  class="text-center small"> Acceuil / Compte</h1>
+        <h1 class=" text-center large"> Mon compte </h1>
+        <div class="card">
+  <div class="card-body">
+    <div class="row">
+      
+      <div class="col-md-8">
+
+        <p class="card-title d-flex">NOM :  {{app.user.nom}}</p>
+
+        <p class="card-title d-flex">PRENOM :  {{app.user.prenom}}</p>
+
+        <p class="card-text d-flex">E-MAIL :  {{app.user.email}}</p>
+      
+        <p class="card-text d-flex">TELEPHONE :  {{app.user.telephone}}</p>
+        <a class="button-18" href="{{path('app_logout')}}">Déconnexion</a>
+        <a class="button-18" href="{{path('modifAccount')}}">Modifier mon profil</a>
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+    </div>
+    <div class="col-md-6 card ">
+        <div class="float-right">
+          <h1 href="" class="text-center medium "> MES POINTS DE FIDELITÉS</h1>
+
+        </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
