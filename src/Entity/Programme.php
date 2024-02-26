@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
-use App\Repository\ProduitRepository;
+use App\Repository\ProgrammeRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -14,37 +14,36 @@ use ApiPlatform\Metadata\Delete;
 //------------------------------------------
 
 #[ApiResource( 
-    operations:[new Get(normalizationContext:['groups'=>'produit:item']),
-            new GetCollection(normalizationContext:['groups'=>'produit:list']),
-            new Delete(),
+    operations:[new Get(normalizationContext:['groups'=>'programme:item']),
+            new GetCollection(normalizationContext:['groups'=>'programme:list']),
+            new Delete(),            
         ]
 )]
 
 
-#[ORM\Entity(repositoryClass: ProduitRepository::class)]
-
-class Produit
+#[ORM\Entity(repositoryClass: ProgrammeRepository::class)]
+class Programme
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[groups(['produit:list','produit:item'])]
+    #[groups(['programme:list','programme:item'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[groups(['produit:list','produit:item'])]
+    #[groups(['programme:list','programme:item'])]
     private ?string $nom = null;
 
     #[ORM\Column]
-    #[groups(['produit:list','produit:item'])]
+    #[groups(['programme:list','programme:item'])]
     private ?int $prix = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[groups(['produit:list','produit:item'])]
+    #[groups(['programme:list','programme:item'])]
     private ?string $description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[groups(['produit:list','produit:item'])]
+    #[groups(['programme:list','programme:item'])]
     private ?string $image = null;
 
     public function getId(): ?int
