@@ -20,6 +20,11 @@ use App\Form\ContactType;
 use App\Entity\User;
 use App\Entity\Produit;
 use App\Entity\Contact;
+//use App\Entity\Avis;
+use App\Entity\Article;
+use App\Entity\Ajouter;
+use App\Entity\Panier;
+
 
 
 
@@ -72,13 +77,6 @@ class BaseController extends AbstractController
     public function programme(): Response
     {
         return $this->render('produit/programme.html.twig', [
-        ]);
-    }
-
-    #[Route('/panier', name: 'panier')]
-    public function panier(): Response
-    {
-        return $this->render('base/panier.html.twig', [
         ]);
     }
 
@@ -143,6 +141,154 @@ class BaseController extends AbstractController
             'form' => $form->createView()
         ]);
    
+    }
+
+    //-----------------------------------------------------------------------------------------------------------
+
+    #[Route('/ajouterFavoris', name: 'ajouterFavoris')]
+    public function ajouterFavoris(Request $request, EntityManagerInterface $entityManagerInterface): Response
+    {
+    $id = $request->get('id');
+    $produit = $entityManagerInterface->getRepository(Produit::class)->find($id);
+
+
+    $action = $request->get('action');
+    $this->addFlash('notice', 'Produit ajouter au favoris');
+
+    //ajouter un favoris
+    if ($action == 'ajouterFavoris'){
+        $this->getUser()->addFavori($produit);
+        $entityManagerInterface->persist($this->getUser());
+        $entityManagerInterface->flush();
+
+    } 
+    
+
+    return $this->redirectToRoute('produit');
+    }
+
+
+    #[Route('/supprimerFavoris', name: 'supprimerFavoris')]
+    public function SupprimerFavoris(Request $request, EntityManagerInterface $entityManagerInterface): Response
+    {
+    $id = $request->get('id');
+    $produit = $entityManagerInterface->getRepository(Produit::class)->find($id);
+
+    $action = $request->get('action');
+    $this->addFlash('notice','Produit supprimer des favoris');
+
+    // Supprimer un favoris
+    if ($action == 'supprimerFavoris'){
+        $this->getUser()->removeFavori($produit);
+        $entityManagerInterface->persist($this->getUser());
+        $entityManagerInterface->flush();
+    }
+        return $this->redirectToRoute('produit');
+
+    }
+
+    #[Route('/favoris', name: 'favoris')]
+    public function favoris(Request $request, EntityManagerInterface $entityManagerInterface): Response
+    {
+        $action = $request->get('action');
+        $produitRepository = $entityManagerInterface->getRepository(Produit::class);
+
+        
+        $produits = $produitRepository->findAll(true);
+        
+
+        return $this->render('base/favoris.html.twig', [
+            'produits' => $produits
+
+        ]);
+    }
+
+    #[Route('/panier', name: 'panier')]
+    public function panier(Request $request, EntityManagerInterface $entityManagerInterface): Response
+    {
+        $produitRepository = $entityManagerInterface->getRepository(Produit::class);
+        $produit = $produitRepository->findall();
+
+        return $this->render('base/panier.html.twig', [
+            'produit' => $produit
+        ]);
+    }
+    #[Route('/gestion-panier', name: 'gestionPanier')]
+    public function gestionPanier(Request $request, EntityManagerInterface $entityManagerInterface): Response
+    {
+        //supprimer du panier
+        $action = $request->get('action');
+        $id = $request->get('id');
+        if ($action == 'removePanier'){
+            $panierRepository = $entityManagerInterface->getRepository(Panier::class);
+            $panier = $panierRepository->find($id);
+            $ajouterRepository = $entityManagerInterface->getRepository(Ajouter::class);
+            $ajouter = $ajouterRepository->find($id);
+            $entityManagerInterface->remove($ajouter);
+            $entityManagerInterface->flush();
+            $this->addFlash('notice', 'Produit supprimer du panier');
+
+        }
+
+        // Supprimer toutes les lignes enfants de la table `ajouter` qui font référence à la ligne parente dans la table `panier`
+        if ($action == 'removeAll'){
+            $panierRepository = $entityManagerInterface->getRepository(Panier::class);
+            $panier = $panierRepository->find($id);
+            $ajouterRepository = $entityManagerInterface->getRepository(Ajouter::class);
+            $ajouter = $ajouterRepository->find($id);
+            $ajouterRepository->createQueryBuilder('a')
+            ->delete()
+            ->where('a.idPanier = :panier')
+            ->setParameter('panier', $panier)
+            ->getQuery()
+            ->execute();
+        }
+
+            // Pour gerer les quantité 
+            if ($action == 'plus'){
+                $ajouter = $entityManagerInterface->getRepository(Ajouter::class)->find($id);
+                $ajouter->setQuantite($ajouter->getQuantite()+1);
+                $entityManagerInterface->persist($ajouter);
+                $entityManagerInterface->flush();
+            }
+            if ($action == 'moins'){
+                $ajouter = $entityManagerInterface->getRepository(Ajouter::class)->find($id);
+                $qte = $ajouter->getQuantite();
+                if($qte>1){
+                    $ajouter->setQuantite($qte-1);
+                }
+                $entityManagerInterface->persist($ajouter);
+                $entityManagerInterface->flush();
+            }
+            
+
+        //ajouter au panier
+        $id = $request->get('id');
+        if ($action == 'addPanier'){
+            if($this->getUser()->getPanier()==null){
+                $panier= New Panier();
+                $this->setPanier($panier);
+            }
+            $produit = $entityManagerInterface->getRepository(Produit::class)->find($id);
+            $ajouter = new Ajouter();
+            // A modifié
+            $ajouter->setQuantite(1);
+            if ($produit!==null){
+                $ajouter -> setProduit($produit);
+                $ajouter->setIdPanier($this->getUser()->getPanier());
+                $entityManagerInterface->persist($ajouter);
+                $this->getUser()->getPanier()->addAjouter($ajouter);
+                $entityManagerInterface->persist($this->getUser());
+                $entityManagerInterface->persist($ajouter);
+                $entityManagerInterface->flush();
+                $this->addFlash('notice', 'Produit ajouter au panier');
+                
+            }
+        }
+
+        return $this->redirectToRoute('panier');
+        
+            
     }
 
 }

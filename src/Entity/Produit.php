@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ProduitRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -46,6 +48,15 @@ class Produit
     #[ORM\Column(length: 255, nullable: true)]
     #[groups(['produit:list','produit:item'])]
     private ?string $image = null;
+
+    #[ORM\OneToMany(targetEntity: Ajouter::class, mappedBy: 'produit')]
+    private Collection $ajouters;
+
+    public function __construct()
+    {
+        $this->ajouters = new ArrayCollection();
+    }
+   
 
     public function getId(): ?int
     {
@@ -99,4 +110,36 @@ class Produit
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Ajouter>
+     */
+    public function getAjouters(): Collection
+    {
+        return $this->ajouters;
+    }
+
+    public function addAjouter(Ajouter $ajouter): static
+    {
+        if (!$this->ajouters->contains($ajouter)) {
+            $this->ajouters->add($ajouter);
+            $ajouter->setProduit($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAjouter(Ajouter $ajouter): static
+    {
+        if ($this->ajouters->removeElement($ajouter)) {
+            // set the owning side to null (unless already changed)
+            if ($ajouter->getProduit() === $this) {
+                $ajouter->setProduit(null);
+            }
+        }
+
+        return $this;
+    }
+
+   
 }

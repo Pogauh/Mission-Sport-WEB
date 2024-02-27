@@ -1,7 +1,111 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{parent()}}{% endblock %}
+{% set frais_port = 5.99 %}
+{% set sousTotal = 0 %}
+
+
+{% macro length(array) %}
+    {{ array|length }}
+{% endmacro %}
+
+
+{% block title %}{{parent()}}Mon panier{% endblock %}
 
 {% block body %}
+
+<style>
+.medium{
+    font-size: medium;
+}
+.large {
+    font-size:large;
+}
+.small{
+    font-size : small;
+}
+.Déconnexion{
+    text-decoration: underline;
+        font-size: medium;
+        text-align : center;
+
+}
+</style>
+
+
+
+
+
+
+</style>
+
+
+
+<div class="container">
+  <h1 class="text-left small"> Acceuil / Mon panier</h1>
+
+
+  
+<div class="row">
+    {% if app.user.panier is not empty %}
+  
+    <div class="col-md-5 card">
+      <div class="card">
+        {% for produit in app.user.panier.ajouters %}
+          {% set sousTotal = sousTotal + (produit.produit.prix * produit.quantite) %}
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-4">
+                <img src="assets/{{ produit.produit.image }}" class="card-img-top">
+              </div>
+              <div class="col-md-8">
+                <a href="{{ path('produit', {'id': produit.produit.id}) }}" class="btn btn-outline-dark card-title">{{ produit.produit.nom }}</a>
+                <h2 class="card-title text-base font-bold">{{ produit.produit.prix }}€</h2>
+                <a>Quantité : {{produit.quantite}}</a>
+                <div class="flex mt-2 mb-2">
+                  <a href="{{path('gestionPanier',{'id':produit.id,'action':'moins'})}}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-file-minus" viewBox="0 0 16 16"><path d="M5.5 8a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1H6a.5.5 0 0 1-.5-.5z"/></svg>
+                  </a>
+
+                  <a  href="{{path('gestionPanier',{'id':produit.id,'action':'plus'})}}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16"><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/></svg>
+                  </a><br>
+                </div>
+                <a href="{{path('gestionPanier',{'id':produit.id,'action':'removePanier'})}}" class="btn btn-primary rounded-full text-xs ">Supprimer l'article panier</a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+      {% else %}
+        <h1 class="font-bold">Panier vide</h1>
+        <a href="{{path('produit')}}" class="underline">Aller au shop </a>
+      {% endif %}
+      <a href="{{path('gestionPanier',{'id':app.user.panier.id,'action':'removeAll'})}}" class="btn btn-lg font-bold underline">Supprimer le panier</a>
+
+    </div>
+
+
+  <div class="col-md-6 card">
+      <div class="card-body">
+        <h5 class="card-title">Résumé de commande</h5>
+        <p class="card-text">Nombre de produits : {{ app.user.panier.ajouters|length }}</p>
+        <p class="card-text">Sous-total : {{ sousTotal }}€</p>
+        {% if app.user.panier.ajouters|length > 0 %}
+        <p class="card-text">Frais de port : {{frais_port}}</p>
+        {% else %}
+        <p class="card-text">Frais de port : 0€</p>
+        {% endif %}
+
+        <hr class="m-3">
+        <h4 class="card-text mb-5">Total : {{ sousTotal + frais_port }} €</h4>
+        <a href="panierFini" class="btn btn-primary btn-lg btn-block">Confirmer mon panier</a>
+      </div>
+    </div>
+
+
+</div>
+ 
+
+
 
 {% endblock %}
