@@ -16,7 +16,6 @@ use App\Form\ModifAccountType;
 use App\Form\AddProduitType;
 use App\Form\ContactType;
 
-
 use App\Entity\User;
 use App\Entity\Produit;
 use App\Entity\Contact;
@@ -238,7 +237,7 @@ class BaseController extends AbstractController
             $ajouter = $ajouterRepository->find($id);
             $ajouterRepository->createQueryBuilder('a')
             ->delete()
-            ->where('a.idPanier = :panier')
+            ->where('a.panier = :panier')
             ->setParameter('panier', $panier)
             ->getQuery()
             ->execute();
@@ -289,6 +288,57 @@ class BaseController extends AbstractController
         return $this->redirectToRoute('panier');
         
             
+    }
+
+    #[Route('/gestion', name: 'gestion')]
+    public function gestion(): Response
+    {
+        return $this->render('base/gestion.html.twig', [
+        ]);
+    }
+
+#[Route('/addProduit', name: 'addProduit')]
+    public function addProduit(Request $request, SluggerInterface $slugger, EntityManagerInterface $entityManagerInterface): Response
+    {
+        $produit = new Produit();
+
+        $form = $this->createForm(AddProduitType::class, $produit);
+
+        if($request->isMethod('POST')){
+            $form->handleRequest($request);
+            if ($form->isSubmitted()&&$form->isValid()){
+
+
+                //C'est pour enregistré les image dans le produit
+                
+                $img = $form->get('image')->getData();
+                if($img){
+
+                    $nomImage= pathinfo($img->getClientOriginalName(), PATHINFO_FILENAME);
+                    $nomImage= $slugger->slug($nomImage);
+                    $nomImage = $nomImage.'-'.uniqid().'.'.$img->guessExtension();
+                    $produit->setImage($nomImage);
+                       try{                 
+                           $img->move($this->getParameter('image_directory'), $nomImage);
+                           $this->addFlash('notice', 'Fichier envoyé');
+                       }
+                       catch(FileException $e){
+                           $this->addFlash('notice', 'Erreur d\'envoi');
+                       } 
+                }
+
+
+                $entityManagerInterface->persist($produit);
+                $entityManagerInterface->flush();
+                
+
+            }
+
+        }
+
+        return $this->render('base/addProduit.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
 }

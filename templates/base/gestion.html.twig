@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{parent()}}Modification{% endblock %}
+
+{% block body %}
+
+    <div class="mx-auto mt-10 mb-10 w-[15%] p-4 text-white text-center bg-gray-800 hover:bg-gray-700 transition duration-300 transform hover:scale-100">
+        <a href="{{path('addProduit')}}" class="text-xl font-bold">
+          Enregistrer un nouveau produit
+      </a>  
+    </div>
+    
+
+{% endblock %}

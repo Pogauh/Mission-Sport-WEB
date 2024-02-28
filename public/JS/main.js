@@ -145,7 +145,7 @@ async function afficherProduit() {
                 
                 var img = document.createElement("img");
                 img.src = "assets/" + programme.image;
-                img.classList.add("w-30", "h-80", "object-cover", "rounded-md");
+                img.classList.add("w-30", "h-80", "object-cover", "rounded-md","transition","hover:scale-110");
     
                 var divDetail = document.createElement("div");
                 divDetail.classList.add("p-4", "grey");
@@ -174,7 +174,7 @@ async function afficherProduit() {
                 var ajouterAuPanier = document.createElement("a");
                 ajouterAuPanier.href = "#";
                 ajouterAuPanier.innerText = "Ajouter au panier";
-                ajouterAuPanier.classList.add("bg-black", "text-white", "py-2", "px-2", "rounded-md");
+                ajouterAuPanier.classList.add("bg-black", "text-white", "py-2", "px-2", "rounded-md","transition","hover:scale-110");
     
                 var etoile = document.createElement("a");
                 etoile.href = "#";

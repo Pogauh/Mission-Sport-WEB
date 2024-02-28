@@ -1,22 +1,60 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Reset your password{% endblock %}
+{% block title %}Réinitialisation de mot de passe{% endblock %}
 
 {% block body %}
+
     {% for flash_error in app.flashes('reset_password_error') %}
         <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
     {% endfor %}
-    <h1>Reset your password</h1>
 
-    {{ form_start(requestForm) }}
-        {{ form_row(requestForm.email) }}
-        <div>
-            <small>
-                Enter your email address, and we will send you a
-                link to reset your password.
-            </small>
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .container {
+        padding-top: 2rem;
+    }
+
+    .card {
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #2c2d2e;
+    }
+
+    .arrondie {
+        border-radius: 10px;
+    }
+</style>
+
+<div class="container">
+    <div class="row justify-content-center align-items-center min-vh-10">
+        <div class="col-md-4">
+            <div class="card arrondie">
+                <div class="card-body text-center">
+                    <h1 class="h3 mb-3 font-weight-normal text-center">Réinitialiser votre mot de passe</h1>
+
+                    {{ form_start(requestForm) }}
+                    {{ form_row(requestForm.email, {'label_attr': {'class': 'col-form-label, d-flex, mt-3'}})}}
+                    <div>
+                        <a class="text-sm ">Entrez votre adresse e-mail et nous vous enverrons un lien pour réinitialiser votre mot de passe.</a>
+                    </div>
+                    <button class="btn btn-primary btn-block arrondie">Envoyer l'email de réinitialisation</button>
+                    {{ form_end(requestForm) }}
+                </div>
+            </div>
         </div>
+    </div>
+</div>
 
-        <button class="btn btn-primary">Send password reset email</button>
-    {{ form_end(requestForm) }}
 {% endblock %}
+

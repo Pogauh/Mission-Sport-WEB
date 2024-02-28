@@ -47,7 +47,6 @@
   
 <div class="row">
     {% if app.user.panier is not empty %}
-  
     <div class="col-md-5 card">
       <div class="card">
         {% for produit in app.user.panier.ajouters %}
@@ -77,15 +76,25 @@
         {% endfor %}
       </div>
       {% else %}
+        <div class="text-center py-3">
         <h1 class="font-bold">Panier vide</h1>
         <a href="{{path('produit')}}" class="underline">Aller au shop </a>
-      {% endif %}
-      <a href="{{path('gestionPanier',{'id':app.user.panier.id,'action':'removeAll'})}}" class="btn btn-lg font-bold underline">Supprimer le panier</a>
+        </div>
 
+      {% endif %}
+
+      {% if app.user.panier.ajouters|length != 0 %}
+      <a href="{{path('gestionPanier',{'id':app.user.panier.id,'action':'removeAll'})}}" class="btn btn-lg font-bold underline">Supprimer le panier</a>
+      {% else %}
+        <div class="text-center py-3 ">
+        <h1 class="font-bold">Panier vide</h1>
+        <a href="{{path('produit')}}" class="underline">Aller au shop </a>
+        </div>
+      {% endif %}
     </div>
 
-
-  <div class="col-md-6 card">
+  {% if app.user.panier.ajouters|length != 0 %}
+    <div class="col-md-6 card">
       <div class="card-body">
         <h5 class="card-title">Résumé de commande</h5>
         <p class="card-text">Nombre de produits : {{ app.user.panier.ajouters|length }}</p>
@@ -101,6 +110,8 @@
         <a href="panierFini" class="btn btn-primary btn-lg btn-block">Confirmer mon panier</a>
       </div>
     </div>
+  {% endif %}
+
 
 
 </div>
