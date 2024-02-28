@@ -1,5 +1,12 @@
 <!DOCTYPE html>
 <html>
+
+  <style>
+    .grey {
+        background-color: rgb(235 235 235);
+    }
+    </style>
+
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
@@ -20,7 +27,9 @@
         <script type="module" src="JS/main.js"></script>
         {% endblock %}
     </head>
-    <body>
+
+      <body>
+
         <header class="bg-white shadow-lg h-23 hidden md:flex">
           <a href="{{path('app_base')}}" class="border flex-shrink-0 flex items-center justify-center px-4 lg:px-6 xl:px-8">
             <img class="h-20" src="assets/nav_missionSport.png" alt="nav mission sport"/>
@@ -61,8 +70,7 @@
               </li>
               {% endif %}
 
-              
-              
+            
             </ul>
           </nav>
           <nav class="hidden xl:contents">
@@ -119,12 +127,99 @@
         </header>
         
         
+        <div class="fixed z-10 mt-3 ml-[90%] block lg:hidden">
+          <button class="buttonNavPetit relative group">
+            <div class="relative flex overflow-hidden items-center justify-center rounded-full w-[50px] h-[50px] transform transition-all bg-slate-700 ring-0 ring-gray-300 hover:ring-8 group-focus:ring-4 ring-opacity-30 duration-200 shadow-md">
+              <div class="flex flex-col justify-between w-[20px] h-[20px] transform transition-all duration-300 origin-center overflow-hidden">
+                <div class="bg-white h-[2px] w-7 transform transition-all duration-300 origin-left group-focus:rotate-[42deg]"></div>
+                <div class="bg-white h-[2px] w-1/2 rounded transform transition-all duration-300 group-focus:-translate-x-10"></div>
+                <div class="bg-white h-[2px] w-7 transform transition-all duration-300 origin-left group-focus:-rotate-[42deg]"></div>
+              </div>
+            </div>
+          </button>
+        </div>
+
+        <!--Le menu smartphone-->
+        <nav class="absolute navbarPetit  rounded-md w-72 h-screen flex-col justify-between hidden md:hidden mt-[0px] ">
+          <div class=" grey h-full">
+            <div class="flex  justify-center  shadow-sm ">
+              <div class="">
+        
+                <a href="{{path('app_base')}}" class="flex items-center justify-center">
+                  <img class="h-45" src="assets/logo mission sport.png" alt="nav mission sport"/>
+                </a>              </div>
+            </div>
+            <div class="pl-10">
+        
+              <ul class="space-y-8 pt-10">
+                <li class="flex space-x-4 items-center hover:text-indigo-600 cursor-pointer">
+                  <img src="assets/bras.png" height="32" width="32"></img>
+                  <a href="#">Trouvez votre Programme</a>
+                </li>
+                <li class="flex space-x-4 items-center hover:text-indigo-600 cursor-pointer">
+                  <img src="assets/bras.png" height="32" width="32"></img>
+                  <a href="#">Produit</a>
+                </li>
+                <li class="flex space-x-4 items-center hover:text-indigo-600 cursor-pointer">
+                  <img src="assets/bras.png" height="32" width="32"></img>
+        
+                  <a href="#">Offre</a>
+                </li>
+                <li class="flex space-x-4 items-center hover:text-indigo-600 cursor-pointer">
+                  <img src="assets/bras.png" height="32" width="32"></img>
+        
+                  <a href="#">Contact</a>
+                </li>
+
+                {% if is_granted('ROLE_ADMIN')%}
+
+                <li class="flex space-x-4 items-center hover:text-indigo-600 cursor-pointer">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                  </svg>
+                  <a href="#">Gestion</a>
+                </li>
+
+                {% endif %}
+
+                <div class="border flex items-center mt-5 px-4 lg:px-6 xl:px-8">
+                  {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                  <a href="{{path('panier')}}" class="mr-5 lg:mr-6 xl:mr-8" alt="Le chariot du panier">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16" >
+                      <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                    </svg>
+                  </a>
+                  {% else %}
+                  <a href="{{path('app_login')}}" class="mr-5 lg:mr-6 xl:mr-8" alt="Le chariot du panier">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16" >
+                      <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                    </svg>
+                  </a>
+                  {% endif %}
+      
+                  
+                  {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                  <a href="{{path('account')}}">
+                  {% else %}
+                  <a href="{{path('app_login')}}">
+                  {% endif %}
+      
+                  <button class="bg-black hover:bg-gray-700 text-white font-bold px-4 xl:px-6 py-2 xl:py-3 rounded">Mon compte
+                  </button>
+                  </a>
+      
+                </div>
 
 
 
-
-
-
+              </ul>
+        
+            </div>
+          </div>
+          
+        </nav>
 
 
 

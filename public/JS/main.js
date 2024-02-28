@@ -1,5 +1,19 @@
 import {getProduits, deleteProduit, deleteProgramme, getProgrammes} from './api_produit.js ';
 
+
+document.addEventListener("DOMContentLoaded", function() {
+    var navbarPetit = document.querySelector(".navbarPetit");
+    var ButtonNavPetit = document.querySelector('.buttonNavPetit');
+
+    ButtonNavPetit.addEventListener('click', function () {
+        navbarPetit.classList.toggle('hidden');
+        navbarPetit.classList.add("fixed");
+    });
+
+});
+
+
+
 async function afficherProduit() {
     try {
         const produits = await getProduits();
