@@ -7,11 +7,15 @@ use App\Repository\ProduitRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Delete;
+
+use Doctrine\ORM\Mapping as ORM;
+
+
+
 
 //------------------------------------------
 
@@ -30,11 +34,11 @@ class Produit
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[groups(['produit:list','produit:item'])]
+    #[groups(['produit:list','produit:item','ajouter:list','ajouter:item'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[groups(['produit:list','produit:item'])]
+    #[groups(['produit:list','produit:item','ajouter:list','ajouter:item'])]
     private ?string $nom = null;
 
     #[ORM\Column]
@@ -56,7 +60,7 @@ class Produit
     {
         $this->ajouters = new ArrayCollection();
     }
-   
+
 
     public function getId(): ?int
     {
@@ -139,7 +143,5 @@ class Produit
         }
 
         return $this;
-    }
-
-   
+    }   
 }

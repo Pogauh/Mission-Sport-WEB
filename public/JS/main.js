@@ -28,22 +28,22 @@ async function afficherProduit() {
             if (elementsDansLaLigne === 0) {
                 // Créer une nouvelle ligne (flex container)
                 divLigne = document.createElement("div");
-                divLigne.classList.add("flex", "justify-around", "mt-5");
+                divLigne.classList.add("mx-auto","flex-wrap","flex", "justify-center","grey", "p-3");
                 container.appendChild(divLigne);
             }
 
             var divCard = document.createElement("div");
-            divCard.classList.add("w-72", "mx-auto", "rounded-md");
+            divCard.classList.add("w-72", "mx-auto", "rounded-md","sm:w-full", "md:w-full" ,"lg:w-1/3", "xl:w-1/3");
+            
             
             var img = document.createElement("img");
             img.src = "assets/" + produit.image;
-            img.classList.add("w-30", "h-80", "object-cover", "rounded-md");
+            img.classList.add("w-30", "h-80","mx-auto", "object-cover", "rounded-md","transition","hover:scale-110");
 
             var divDetail = document.createElement("div");
-            divDetail.classList.add("p-4", "grey");
+            divDetail.classList.add("p-4","grey","items-center", "justify-between","mb-4");
 
             var divFlex = document.createElement("div");
-            divFlex.classList.add("flex", "flex-col", "items-center", "justify-between", "mb-4");
 
             var textCenter = document.createElement("div");
             textCenter.classList.add("text-center");
@@ -61,12 +61,12 @@ async function afficherProduit() {
             prix.classList.add("text-gray-700", "mb-4", "font-bold");
 
             var divButtons = document.createElement("div");
-            divButtons.classList.add("flex", "items-center", "justify-between");
+            divButtons.classList.add("flex", "items-center", "justify-center");
 
             var ajouterAuPanier = document.createElement("a");
             ajouterAuPanier.href = "#";
             ajouterAuPanier.innerText = "Ajouter au panier";
-            ajouterAuPanier.classList.add("bg-black", "text-white", "py-2", "px-2", "rounded-md");
+            ajouterAuPanier.classList.add("bg-black", "text-white", "py-2", "px-2", "rounded-md","transition","hover:scale-110");
 
             var etoile = document.createElement("a");
             etoile.href = "#";
@@ -150,22 +150,22 @@ async function afficherProduit() {
                 if (elementsDansLaLigne === 0) {
                     // Créer une nouvelle ligne (flex container)
                     divLigne = document.createElement("div");
-                    divLigne.classList.add("flex", "justify-around", "mt-5");
+                    divLigne.classList.add("mx-auto","flex-wrap","flex", "justify-center","grey", "p-3");
                     container.appendChild(divLigne);
                 }
     
                 var divCard = document.createElement("div");
-                divCard.classList.add("w-72", "mx-auto", "rounded-md");
+                divCard.classList.add("w-72", "mx-auto", "rounded-md","sm:w-full", "md:w-full" ,"lg:w-1/3", "xl:w-1/3");
+                
                 
                 var img = document.createElement("img");
                 img.src = "assets/" + programme.image;
-                img.classList.add("w-30", "h-80", "object-cover", "rounded-md","transition","hover:scale-110");
+                img.classList.add("w-30", "h-80","mx-auto", "object-cover", "rounded-md","transition","hover:scale-110");
     
                 var divDetail = document.createElement("div");
-                divDetail.classList.add("p-4", "grey");
+                divDetail.classList.add("p-4","grey","items-center", "justify-between","mb-4");
     
                 var divFlex = document.createElement("div");
-                divFlex.classList.add("flex", "flex-col", "items-center", "justify-between", "mb-4");
     
                 var textCenter = document.createElement("div");
                 textCenter.classList.add("text-center");
@@ -183,7 +183,7 @@ async function afficherProduit() {
                 prix.classList.add("text-gray-700", "mb-4", "font-bold");
     
                 var divButtons = document.createElement("div");
-                divButtons.classList.add("flex", "items-center", "justify-between");
+                divButtons.classList.add("flex", "items-center", "justify-center");
     
                 var ajouterAuPanier = document.createElement("a");
                 ajouterAuPanier.href = "#";
