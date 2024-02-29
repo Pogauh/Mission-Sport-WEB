@@ -29,8 +29,8 @@
     </head>
 
       <body>
-
-        <header class="bg-white shadow-lg h-23 hidden md:flex">
+        <!-- Nav bar graand ecran -->
+        <header class="z-10  w-full bg-white shadow-lg h-23 flex hidden lg:flex">
           <a href="{{path('app_base')}}" class="border flex-shrink-0 flex items-center justify-center px-4 lg:px-6 xl:px-8">
             <img class="h-20" src="assets/nav_missionSport.png" alt="nav mission sport"/>
           </a>
@@ -129,8 +129,8 @@
         
         <div class="fixed z-10 mt-3 ml-[90%] block lg:hidden">
           <button class="buttonNavPetit relative group">
-            <div class="relative flex overflow-hidden items-center justify-center rounded-full w-[50px] h-[50px] transform transition-all bg-slate-700 ring-0 ring-gray-300 hover:ring-8 group-focus:ring-4 ring-opacity-30 duration-200 shadow-md">
-              <div class="flex flex-col justify-between w-[20px] h-[20px] transform transition-all duration-300 origin-center overflow-hidden">
+            <div class="relative flex overflow-hidden items-center justify-center rounded-full w-[100px] h-[100px] transform transition-all bg-slate-700 ring-0 ring-gray-300 hover:ring-8 group-focus:ring-4 ring-opacity-30 duration-200 shadow-md">
+              <div class="flex flex-col justify-between w-[40px] h-[40px] transform transition-all duration-300 origin-center overflow-hidden">
                 <div class="bg-white h-[2px] w-7 transform transition-all duration-300 origin-left group-focus:rotate-[42deg]"></div>
                 <div class="bg-white h-[2px] w-1/2 rounded transform transition-all duration-300 group-focus:-translate-x-10"></div>
                 <div class="bg-white h-[2px] w-7 transform transition-all duration-300 origin-left group-focus:-rotate-[42deg]"></div>
@@ -140,7 +140,7 @@
         </div>
 
         <!--Le menu smartphone-->
-        <nav class="absolute navbarPetit  rounded-md w-72 h-screen flex-col justify-between hidden md:hidden mt-[0px] ">
+        <nav class="absolute navbarPetit  rounded-md w-72 h-screen flex-col justify-between hidden lg:hidden mt-[0px] z-10">
           <div class=" grey h-full">
             <div class="flex  justify-center  shadow-sm ">
               <div class="">
@@ -154,21 +154,21 @@
               <ul class="space-y-8 pt-10">
                 <li class="flex space-x-4 items-center hover:text-indigo-600 cursor-pointer">
                   <img src="assets/bras.png" height="32" width="32"></img>
-                  <a href="#">Trouvez votre Programme</a>
+                  <a href="{{path('programme')}}">Trouvez votre Programme</a>
                 </li>
                 <li class="flex space-x-4 items-center hover:text-indigo-600 cursor-pointer">
                   <img src="assets/bras.png" height="32" width="32"></img>
-                  <a href="#">Produit</a>
-                </li>
-                <li class="flex space-x-4 items-center hover:text-indigo-600 cursor-pointer">
-                  <img src="assets/bras.png" height="32" width="32"></img>
-        
-                  <a href="#">Offre</a>
+                  <a href="{{path('produit')}}">Produit</a>
                 </li>
                 <li class="flex space-x-4 items-center hover:text-indigo-600 cursor-pointer">
                   <img src="assets/bras.png" height="32" width="32"></img>
         
-                  <a href="#">Contact</a>
+                  <a href="{{path('offre')}}">Offre</a>
+                </li>
+                <li class="flex space-x-4 items-center hover:text-indigo-600 cursor-pointer">
+                  <img src="assets/bras.png" height="32" width="32"></img>
+        
+                  <a href="{{path('contact')}}">Contact</a>
                 </li>
 
                 {% if is_granted('ROLE_ADMIN')%}
