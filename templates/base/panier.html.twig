@@ -34,7 +34,7 @@
 
 
 <div class="block lg:hidden">
-  <img src="assets/Baniere_mission_sport.png" alt="">
+  <a href="{{path('app_base')}}" ><img src="assets/Baniere_mission_sport.png" alt=""></a>
 </div>
 
 
@@ -47,7 +47,7 @@
   
 <div class="row justify-center items-center ">
     {% if app.user.panier is not empty %}
-    <div class="col-md-5 card">
+    <div class="col-md-10 card">
       <div class="card">
         {% for produit in app.user.panier.ajouters %}
           {% set sousTotal = sousTotal + (produit.produit.prix * produit.quantite) %}
@@ -70,6 +70,8 @@
                   </a><br>
                 </div>
                 <a href="{{path('gestionPanier',{'id':produit.id,'action':'removePanier'})}}" class="btn btn-primary rounded-full text-xs ">Supprimer l'article panier</a>
+                <a href="{{path('gestionPanier',{'id':app.user.panier.id,'action':'removeAll'})}}" class="btn btn-lg ">Supprimer le panier</a>
+
               </div>
             </div>
           </div>
@@ -78,22 +80,22 @@
       {% else %}
         <div class="text-center py-3">
         <h1 class="font-bold">Panier vide</h1>
-        <a href="{{path('produit')}}" class="underline">Aller au shop </a>
+        <a href="{{path('programme')}}" class="underline">Aller au shop </a>
         </div>
 
       {% endif %}
 
-      {% if app.user.panier.ajouters|length != 0 %}
-      <a href="{{path('gestionPanier',{'id':app.user.panier.id,'action':'removeAll'})}}" class="btn btn-lg font-bold underline">Supprimer le panier</a>
-      {% else %}
-        <div class="text-center py-3 ">
-        <h1 class="font-bold">Panier vide</h1>
-        <a href="{{path('produit')}}" class="underline">Aller au shop </a>
-        </div>
-      {% endif %}
+      
+
+  {% if app.user.panier is not empty %}
+  {% if app.user.panier.ajouters|length == 0 %}
+
+  <div class="text-center py-3">
+    <h1 class="font-bold">Panier vide</h1>
+    <a href="{{path('produit')}}" class="underline">Aller au shop </a>
     </div>
 
-  {% if app.user.panier.ajouters|length != 0 %}
+  {% else %}
     <div class="col-md-6 card">
       <div class="card-body">
         <h5 class="card-title">Résumé de commande</h5>
@@ -106,11 +108,20 @@
         {% endif %}
 
         <hr class="m-3">
+        {% if sousTotal + frais_port == 5.99 %}
+        <h4 class="card-text mb-5">Total : 0 €</h4>
+        {% else %}
         <h4 class="card-text mb-5">Total : {{ sousTotal + frais_port }} €</h4>
-        <a href="panierFini" class="btn btn-primary btn-lg btn-block">Confirmer mon panier</a>
+        {% endif %}
+        <a href="{{path('panierFini',{'id':app.user.panier.id,'action':'removeAll'})}}" class="btn btn-primary btn-lg btn-block">Confirmer mon panier</a>
       </div>
     </div>
   {% endif %}
+
+
+  {% endif %}
+
+
 
 
 

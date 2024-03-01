@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{parent()}}Panier validé{% endblock %}
+
+{% block body %}
+
+
+<div class="block lg:hidden">
+    <a href="{{path('app_base')}}" ><img src="assets/Baniere_mission_sport.png" alt=""></a>
+</div>
+<div class="text-center row">
+    <p class ="text-xl">Confirmation de panier validé</h1>
+    <p class="text-xl">Merci, votre panier a été validé avec succès !</p>
+</div>
+
+
+{% endblock %}

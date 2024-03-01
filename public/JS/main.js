@@ -65,7 +65,7 @@ async function afficherMateriels() {
             divButtons.classList.add("flex", "items-center", "justify-center");
 
             var ajouterAuPanier = document.createElement("a");
-            ajouterAuPanier.href = "#";
+            ajouterAuPanier.href = "/situation1/gestion-panier?id="+produit.id+"&action=addPanier";
             ajouterAuPanier.innerText = "Ajouter au panier";
             ajouterAuPanier.classList.add("bg-black", "text-white", "py-2", "px-2", "rounded-md","transition","hover:scale-110");
 
@@ -189,7 +189,9 @@ async function afficherMateriels() {
                 divButtons.classList.add("flex", "items-center", "justify-center");
     
                 var ajouterAuPanier = document.createElement("a");
-                ajouterAuPanier.href = "#";
+                ajouterAuPanier.href = "/situation1/gestion-panier?id="+programme.id+"&action=addPanier";
+
+
                 ajouterAuPanier.innerText = "Ajouter au panier";
                 ajouterAuPanier.classList.add("bg-black", "text-white", "py-2", "px-2", "rounded-md","transition","hover:scale-110");
     

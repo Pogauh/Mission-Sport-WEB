@@ -274,7 +274,7 @@ class BaseController extends AbstractController
             $ajouter->setQuantite(1);
             if ($produit!==null){
                 $ajouter -> setProduit($produit);
-                $ajouter->setIdPanier($this->getUser()->getPanier());
+                $ajouter->setPanier($this->getUser()->getPanier());
                 $entityManagerInterface->persist($ajouter);
                 $this->getUser()->getPanier()->addAjouter($ajouter);
                 $entityManagerInterface->persist($this->getUser());
@@ -338,6 +338,30 @@ class BaseController extends AbstractController
 
         return $this->render('base/addProduit.html.twig', [
             'form' => $form->createView(),
+        ]);
+    }
+    #[Route('/panierFini', name: 'panierFini')]
+    public function panierFini(Request $request, EntityManagerInterface $entityManagerInterface): Response
+    {  
+        $action = $request->get('action');
+        $id = $request->get('id');
+
+        if ($action == 'removeAll'){
+            $panierRepository = $entityManagerInterface->getRepository(Panier::class);
+            $panier = $panierRepository->find($id);
+            $ajouterRepository = $entityManagerInterface->getRepository(Ajouter::class);
+            $ajouter = $ajouterRepository->find($id);
+            $ajouterRepository->createQueryBuilder('a')
+            ->delete()
+            ->where('a.panier = :panier')
+            ->setParameter('panier', $panier)
+            ->getQuery()
+            ->execute();
+        }
+
+        return $this->render('base/panierFini.html.twig', [
+            
+
         ]);
     }
 
