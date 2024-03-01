@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{parent()}}Article{% endblock %}
+
+{% block body %}
+
+<style>
+
+
+</style>
+
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 card ">
+
+        
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-12">
+        {% if produits.image is not null %}
+                            <img src="../assets/{{ produits.image }}" class="card-img-top" alt="{{ produits.nom }}">
+                        {% else %}
+                            <div class="card-img-top bg-secondary text-center text-white py-3">
+                            <img src="../assets/Pasdimage.png" class="card-img-top">
+                            </div>
+                        {% endif %}      </div>
+      
+    
+  </div>
+</div>
+
+    </div>
+    <div class="col-md-6 card ">
+        <div class="float-right">
+
+
+ <h2 class="card-title">{{ produits.nom }}</h2>
+        <h2 class="card-title small" >Prix :{{ produits.prix }}€/pièce</h2>
+        <a href="{{path('gestionPanier',{'id':produits.id,'action':'addPanier'})}}" class="btn btn-primary"> ajouter au panier</a>
+        
+          <h4 class="card-text bold">Détails du produit:</h4>
+          <p> {{ produits.description}}</p>        
+          <div class="col-md-8">
+      </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

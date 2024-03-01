@@ -365,4 +365,21 @@ class BaseController extends AbstractController
         ]);
     }
 
+
+    #[Route('/produitPage/{id}', name: 'produitPage')]
+    public function produitPage(Request $request, EntityManagerInterface $entityManagerInterface): Response
+    {
+        $id = $request -> get('id');
+        $produitRepository = $entityManagerInterface -> getRepository(Produit::class);
+        $produits = $produitRepository -> find($id);
+
+
+        return $this->render('produit/articlePage.html.twig', [
+            'produits' => $produits
+
+            
+
+        ]);
+    }
+
 }
