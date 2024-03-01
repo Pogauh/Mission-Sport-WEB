@@ -35,6 +35,7 @@ class Panier
     private ?User $user = null;
 
     #[ORM\OneToMany(mappedBy: 'panier', targetEntity: Ajouter::class)]
+    #[groups(['panier:list','panier:item'])]
     private Collection $ajouters;
 
     public function __construct()

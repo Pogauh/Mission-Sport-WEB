@@ -1,0 +1,33 @@
+MCD 01/03/2024 sans catégorie 
+ 
+Contact:id,nom, sujet, email, date_envoi, message 	
+User:id, email,nom,prenom,telephone,password,roles,is_verified
+demande, 11 Reset_password_request ,1N User
+Reset_password_request:id,user_id,hashed_token, selector,requested_at,expires_at
+
+
+Panier:id,user_id
+se constitue, 11 Ajouter, 1N panier
+Ajouter:id,panier_id,user_id,produit_id
+ajoute , 0N produit,0N programme , 1N ajouter
+
+Produit:id,nom, description , prix
+Programme:id, nom, description , prix
+
+
+-----------MCD avec categorie -------------
+
+Contact:id,nom, sujet, email, date_envoi, message 	
+User:id, email,nom,prenom,telephone,password,roles,is_verified
+demande, 11 Reset_password_request ,1N User
+Reset_password_request:id,user_id,hashed_token, selector,requested_at,expires_at
+
+
+Panier:id,user_id
+se constitue, 11 Ajouter, 1N panier
+Ajouter:id,panier_id,user_id,produit_id
+ajoute , 0N produit, 1N ajouter
+
+Produit:id,nom, description , prix,categorie_id
+appartient,0N categorie, 11 Produit
+categorie:id,nom

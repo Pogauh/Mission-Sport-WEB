@@ -34,11 +34,11 @@ class Produit
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[groups(['produit:list','produit:item','ajouter:list','ajouter:item'])]
+    #[groups(['produit:list','produit:item','ajouter:list','ajouter:item','categorie:list','categorie:item','panier:list','panier:item'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[groups(['produit:list','produit:item','ajouter:list','ajouter:item'])]
+    #[groups(['produit:list','produit:item','ajouter:list','ajouter:item','categorie:list','categorie:item','panier:list','panier:item'])]
     private ?string $nom = null;
 
     #[ORM\Column]
@@ -55,6 +55,11 @@ class Produit
 
     #[ORM\OneToMany(targetEntity: Ajouter::class, mappedBy: 'produit')]
     private Collection $ajouters;
+
+    #[ORM\ManyToOne(inversedBy: 'produits')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[groups(['produit:list','produit:item'])]
+    private ?Categorie $categorie = null;
 
     public function __construct()
     {
@@ -141,6 +146,18 @@ class Produit
                 $ajouter->setProduit(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCategorie(): ?Categorie
+    {
+        return $this->categorie;
+    }
+
+    public function setCategorie(?Categorie $categorie): static
+    {
+        $this->categorie = $categorie;
 
         return $this;
     }   

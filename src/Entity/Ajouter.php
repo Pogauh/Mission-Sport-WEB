@@ -25,13 +25,14 @@ class Ajouter
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[groups(['panier:list','panier:item'])]
     private ?int $id = null;
 
     #[ORM\Column]
     private ?int $quantite = null;
 
     #[ORM\ManyToOne(inversedBy: 'ajouters')]
-    #[groups(['ajouter:list','ajouter:item'])]
+    #[groups(['ajouter:list','ajouter:item','panier:list','panier:item'])]
     private ?Produit $produit = null;
 
     #[ORM\ManyToOne(inversedBy: 'ajouters')]

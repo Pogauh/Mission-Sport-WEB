@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 
-async function afficherProduit() {
+async function afficherMateriels() {
     try {
         const produits = await getProduits();
         var lesProduits = produits["hydra:member"];
@@ -25,6 +25,7 @@ async function afficherProduit() {
         var elementsDansLaLigne = 0;
         var divLigne;  // Variable pour stocker la ligne actuelle
         for (let produit of lesProduits) {
+            if (produit.categorie.id === 1){
             if (elementsDansLaLigne === 0) {
                 // Créer une nouvelle ligne (flex container)
                 divLigne = document.createElement("div");
@@ -104,6 +105,7 @@ async function afficherProduit() {
                 elementsDansLaLigne = 0;
             }
         }
+        }
     } catch (erreur) {
         console.log('erreur :', erreur);
     }
@@ -138,7 +140,7 @@ async function afficherProduit() {
     //-------------------------------------------------------------------------------------------------------
     async function afficherProgramme() {
         try {
-            const programmes = await getProgrammes();
+            const programmes = await getProduits();
             var lesProgrammes = programmes["hydra:member"];
             console.log(programmes);
     
@@ -147,6 +149,7 @@ async function afficherProduit() {
             var elementsDansLaLigne = 0;
             var divLigne;  // Variable pour stocker la ligne actuelle
             for (let programme of lesProgrammes) {
+                if (programme.categorie.id === 2){
                 if (elementsDansLaLigne === 0) {
                     // Créer une nouvelle ligne (flex container)
                     divLigne = document.createElement("div");
@@ -226,6 +229,7 @@ async function afficherProduit() {
                     elementsDansLaLigne = 0;
                 }
             }
+        }
         } catch (erreur) {
             console.log('erreur :', erreur);
         }
@@ -238,7 +242,7 @@ async function afficherProduit() {
 
     document.addEventListener('DOMContentLoaded', function() {
         if (window.location.href.endsWith("/situation1/produit")) {
-            afficherProduit();
+            afficherMateriels();
         }
     });
 
