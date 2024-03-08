@@ -33,6 +33,7 @@
 
 
 
+
 <div class="block lg:hidden">
   <a href="{{path('app_base')}}" ><img src="assets/Baniere_mission_sport.png" alt=""></a>
 </div>
@@ -113,7 +114,7 @@
         {% else %}
         <h4 class="card-text mb-5">Total : {{ sousTotal + frais_port }} €</h4>
         {% endif %}
-        <a href="{{path('panierFini',{'id':app.user.panier.id,'action':'removeAll'})}}" class="btn btn-primary btn-lg btn-block">Confirmer mon panier</a>
+        <a href="{{path('panierFini',{'id':app.user.panier.id,'action':'validerCommande'})}}" class="btn btn-primary btn-lg btn-block">Confirmer mon panier</a>
       </div>
     </div>
   {% endif %}

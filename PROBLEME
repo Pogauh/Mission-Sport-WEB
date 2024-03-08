@@ -1,0 +1,50 @@
+Probleme symfony : il ne comprend pas : 
+
+                    {% if is_granted('IS_AUTHENTICATED_FULLY') and (app.user.panier is empty or produit not in app.user.panier.ajouters) %}
+                        <a href="{{path('gestionPanier',{'id':produit.id,'action':'addPanier'})}}" class="bg-black impact text-white py-2 px-2 rounded-md transition hover:scale-110  ">ajouter au panier</a>
+                    {% elseif is_granted ('IS_AUTHENTICATED_FULLY') and produit in app.user.panier.ajouters %}
+                        <a href="{{path('gestionPanier',{'id':produit.id,'action':'moins'})}}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-minus" viewBox="0 0 16 16"> <path d="M5.5 8a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1H6a.5.5 0 0 1-.5-.5z"/></svg>
+                        </a>
+                        <a>{{produit.quantite}}</a>
+                        <a href="{{path('gestionPanier',{'id':produit.id,'action':'plus'})}}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16"><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/></svg>
+                        </a>
+                    {% else %}
+                        <a href="{{path('app_login')}}" class="bg-black impact text-white py-2 px-2 rounded-md transition hover:scale-110  ">ajouter au panier</a>
+                    {% endif %}
+
+Il affiche toujours la premiere condition il fouille pas dans ajouter on dirait
+
+----------------------------------------------------------
+
+Difficulté dans la création du formulaire pour envoyé un avis avec le user connecté renseigné ainsi que l'id du produit 
+sur la page actuel qui est produitPage/8 par exemple
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

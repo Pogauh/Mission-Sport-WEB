@@ -35,3 +35,10 @@
   .header-links li:not(.active):hover span::before {
     background-color: #ccc;
   }
+
+  .grey {
+    background-color: rgb(235 235 235);
+  }
+
+  .impact { font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif
+  };

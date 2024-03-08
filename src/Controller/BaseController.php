@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 use Symfony\Component\Mailer\MailerInterface;
 
@@ -15,14 +16,18 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Form\ModifAccountType;
 use App\Form\AddProduitType;
 use App\Form\ContactType;
+use App\Form\AvisType;
+
 
 use App\Entity\User;
 use App\Entity\Produit;
 use App\Entity\Contact;
-//use App\Entity\Avis;
+use App\Entity\Avis;
 use App\Entity\Article;
 use App\Entity\Ajouter;
 use App\Entity\Panier;
+use App\Entity\Commande;
+use App\Entity\LigneCommande;
 
 
 
@@ -54,14 +59,22 @@ class BaseController extends AbstractController
     #[Route('/account', name: 'account')]
     public function account(): Response
     {
+        $user = $this->getUser();
+        $commandes = $user->getCommandes();
+        
         return $this->render('base/compte.html.twig', [
+            'commandes' => $commandes
         ]);
     }
 
     #[Route('/produit', name: 'produit')]
-    public function produit(): Response
+    public function produit(Request $request, EntityManagerInterface $entityManagerInterface): Response
     {
+        $produitRepository = $entityManagerInterface-> getRepository(produit::class);
+        $produits = $produitRepository->findBy(['categorie' => 1 ]);
+
         return $this->render('produit/produit.html.twig', [
+            'produits' => $produits 
         ]);
     }
 
@@ -73,10 +86,16 @@ class BaseController extends AbstractController
     }
 
     #[Route('/programme', name: 'programme')]
-    public function programme(): Response
+    public function programme(Request $request, EntityManagerInterface $entityManagerInterface): Response
     {
+        $produitRepository = $entityManagerInterface-> getRepository(produit::class);
+        $produits = $produitRepository->findBy(['categorie' => 2 ]);
+
+
         return $this->render('produit/programme.html.twig', [
+            'produits' => $produits
         ]);
+
     }
 
     #[Route('modifAccount', name: 'modifAccount')]
@@ -270,7 +289,6 @@ class BaseController extends AbstractController
             }
             $produit = $entityManagerInterface->getRepository(Produit::class)->find($id);
             $ajouter = new Ajouter();
-            // A modifié
             $ajouter->setQuantite(1);
             if ($produit!==null){
                 $ajouter -> setProduit($produit);
@@ -283,6 +301,19 @@ class BaseController extends AbstractController
                 $this->addFlash('notice', 'Produit ajouter au panier');
                 
             }
+        }
+
+
+        $panier = $this->getUser()->getPanier();
+        if ($panier !== null) {
+            $ajouts = $panier->getAjouters();
+            $prixTotal = 0;
+            foreach ($ajouts as $ajout) {
+                $produit = $ajout->getProduit();
+                $quantite = $ajout->getQuantite();
+                $prixProduit = $produit->getPrix();
+                $prixTotal += $prixProduit * $quantite;
+                }
         }
 
         return $this->redirectToRoute('panier');
@@ -359,6 +390,40 @@ class BaseController extends AbstractController
             ->execute();
         }
 
+
+        if ($action == 'validerCommande') {
+            $panier = $this->getUser()->getPanier();
+    
+            $prixTotal = 0;
+            $commande = new Commande();
+            $commande->setUser($this->getUser());
+            $commande->setDate(new \DateTime());
+    
+            // Ajouter chaque produit du panier à la commande
+            foreach ($panier->getAjouters() as $ajouter) {
+                $produit = $ajouter->getProduit();
+    
+                // Créer une nouvelle ligne de commande pour chaque produit
+                $ligneCommande = new LigneCommande();
+                $ligneCommande->setProduit($produit);
+                $ligneCommande->setQuantite($ajouter->getQuantite());    
+                $prixTotal += $produit->getPrix() * $ajouter->getQuantite();
+                // Ajouter la ligne de commande à la commande
+                $commande->addLigneCommande($ligneCommande);
+    
+                // Supprimer l'ajout de panier après validation de la commande
+                $entityManagerInterface->remove($ajouter);
+            }
+            $commande->setPrix($prixTotal);
+    
+            // Enregistrer la commande et supprimer le panier
+            $entityManagerInterface->persist($commande);
+            $entityManagerInterface->flush();
+    
+            $this->addFlash('notice', 'Commande validée avec succès');
+            return $this->redirectToRoute('panierFini');
+        }
+
         return $this->render('base/panierFini.html.twig', [
             
 
@@ -367,18 +432,54 @@ class BaseController extends AbstractController
 
 
     #[Route('/produitPage/{id}', name: 'produitPage')]
-    public function produitPage(Request $request, EntityManagerInterface $entityManagerInterface): Response
+    public function produitPage(Request $request, EntityManagerInterface $entityManagerInterface, Security $security): Response
     {
         $id = $request -> get('id');
         $produitRepository = $entityManagerInterface -> getRepository(Produit::class);
         $produits = $produitRepository -> find($id);
 
+        $avisRepository = $entityManagerInterface -> getRepository(Avis::class);
+        $aviss = $avisRepository->findBy(['produit' => $produits]);
+
+        $avis = new Avis();
+        $form = $this->createForm(AvisType::class, $avis);
+
+        if ($request->isMethod('POST')) {
+            $form->handleRequest($request);
+            if ($security->isGranted('ROLE_USER')) {
+                $user = $this->getUser();
+                if ($avis->getProduit() === null) {
+                    $avis->setProduit($produits);
+                }
+                $avis->setUser($user);
+
+                $entityManagerInterface->persist($avis);
+                $entityManagerInterface->flush();
+
+                $this->addFlash('notice', 'Avis envoyé');
+            }
+        }
+
+
+
 
         return $this->render('produit/articlePage.html.twig', [
-            'produits' => $produits
+            'produits' => $produits,
+            'aviss' => $aviss,
+            'form' => $form->createView()
+        ]);
+    }
 
-            
 
+    #[Route('/detailCommande/{$id}', name: 'detailCommande')]
+    public function detailCommande(Request $request, EntityManagerInterface $entityManagerInterface): Response
+    {
+        $id = $request -> get('id');
+        $commandeRepository = $entityManagerInterface->getRepository(Commande::class);
+        $commande = $commandeRepository->find($id);
+
+        return $this->render('base/detailCommande.html.twig', [
+            'commande' => $commande
         ]);
     }
 

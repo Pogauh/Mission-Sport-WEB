@@ -57,6 +57,17 @@
         <div class="float-right">
           <h1 href="" class="text-center medium "> Mes commandes</h1>
 
+          {% for commande in commandes %}
+          <a href="{{ path('detailCommande', {'id': commande.id}) }}">
+            <div class="border-4 rounded-md m-2" alt="">
+              <div class="collumn">
+                <p class="font-bold text-md text-black">Commande du {{commande.date|date('d-m-y')}}</p>
+                <p class="font-bold text-md text-black">Prix :  {{commande.prix}} €</p>
+              </div>
+            </div>
+           </a> 
+            {% endfor %}
+
         </div>
     </div>
   </div>

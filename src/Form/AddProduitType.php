@@ -28,6 +28,12 @@ class AddProduitType extends AbstractType
         ->add('prix', TextType::class, ['attr' => ['class'=> 'form-control'], 'label_attr' => ['class'=> 'fw-bold']])
         ->add('Description', TextareaType::class, ['attr' => ['class'=> 'form-control', 'rows'=>'7', 'cols' => '7'],
         'label_attr' => ['class'=> 'fw-bold']])
+        ->add('categorie', DoctrineEntityType::class, [
+            'class' => Categorie::class,
+            'choice_label' => 'nom',
+            'attr' => ['class'=> 'form-control'],
+            'label_attr' => ['class'=> 'fw-bold'],
+        ])
         ->add('image', FileType::class, array('label' => 'Image à télécharger','mapped'=>false))
         ->add('envoyer', SubmitType::class)
         ;
